@@ -3,7 +3,7 @@
 	<header><h1>{{position}}. {{item.fields.headline}}</h1></header>
 	<p class="item-list-summary">{{item.sectionName}}</p>
 	<div class="item-list-details">
-		<img class="item-list-trail-picture" src="{{item.fields.thumbnail}}">
+		<div class="item-list-trail-picture"><a class="item-list-trail-picture-link" href="{{item.webUrl}}"><img class="item-list-trail-image" src="{{item.fields.thumbnail}}" alt="{{item.fields.headline}}" title="{{item.fields.headline}}"></a></div>
 		<div class="item-list-standfirst">{{item.fields.standfirst}}</div>
 	</div>
 </article>
