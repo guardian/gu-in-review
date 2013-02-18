@@ -55,11 +55,15 @@ body {
 		display: inline-block;
 		padding: 0.5rem;
 		opacity: 0.5;
-		.transition(200ms, 800ms);
+		.transition(100ms, 800ms);
 		}
 	.ui-tabs-anchor {
-		color: darkgrey;
+		color: #585858;
 		text-decoration: none;
+	}
+	.ui-tabs-anchor {
+		.transition(100ms, 600ms);
+		outline: none;
 	}
 	.ui-state-default:hover {
 		opacity: 0.9;
@@ -68,6 +72,37 @@ body {
 	.ui-state-active {
 		opacity: 1;
 		font-size: 1.2rem;
+		.ui-tabs-anchor {
+			color: #610B0B;
+		}
 	}
 	border-bottom: 1px lightgrey solid;
 } 
+
+.app-quote {
+	font-style: italic;
+	font-size: 0.8rem;
+	opacity: 0.7;
+	> p {
+		margin-top: 0.25rem;
+		margin-bottom: 0.4rem;
+	}
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 40rem;
+}
+
+.title {
+	.brand-name {
+		font-size: 160%;
+		font-weight: bold;
+	}
+}
+
+.items {
+	.transition(200ms, 800ms);
+}
+
+header {
+	font-family: Georgia, serif;
+}

@@ -16,7 +16,10 @@ def categorise_content(content):
 	if not content: return {}
 
 	return {"videos" : [item for item in content if data_filters.video(item)],
-		"news" : [item for item in content if data_filters.news(item)]}
+		"news" : [item for item in content if data_filters.news(item)],
+		"features" : [item for item in content if data_filters.features(item)],
+		"blogs" : [item for item in content if data_filters.blog(item)],		
+		"liveblogs" : [i for i in content if data_filters.live(i)],}
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):

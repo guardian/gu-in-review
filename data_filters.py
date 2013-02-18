@@ -16,3 +16,7 @@ def video(item) : return of_type("type/video", item)
 def article(item) : return of_type("type/article", item)
 
 def news(item) : return with_tone("tone/news", item)
+def features(item) : return with_tone("tone/features", item)
+def blog(item) : return with_tone("tone/blog", item) and not with_tone("tone/minutebyminute", item)
+
+def live(item) : return with_tone("tone/blog", item) and with_tone("tone/minutebyminute", item)

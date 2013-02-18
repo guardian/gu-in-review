@@ -4,21 +4,25 @@
 
 {% block content %}
 
-<header><h1>The week in review</h1></header>
+<header><h1 class="title"><span class="brand-name">The Guardian</span> week in review</h1></header>
 
 <blockquote class="app-quote">
-	<p>The past week on the Guardian in review</p>
+	<p>A review of what has been popular on the Guardian in the last week.</p>
 	<p>Like Zeitgeist but worse...</p>
+	<p>All content is ordered according to how popular it was with the readers of the Guardian website.</p>
 </blockquote>
 
 <div id="tabs" class="tabs">
 
 <ul>
 	<li><a href="#news">News</a></li>
+	<li><a href="#features">Features</a></li>
 	<li><a href="#videos">Videos</a></li>
+	<li><a href="#liveblogs">Live blogs</a></li>
+	<li><a href="#blogs">Blogs</a></li>
 </ul>
 
-<section id="news" class="news">
+<section id="news" class="news items">
 	<header><h1>News</h1></header>
 {% for item in news %}
 {% set position = loop.index %}
@@ -26,7 +30,15 @@
 {% endfor %}
 </section>
 
-<section id="videos" class="videos">
+<section id="features" class="features items">
+	<header><h1>Features</h1></header>
+{% for item in features %}
+{% set position = loop.index %}
+{% include "article.html"%}
+{% endfor %}
+</section>
+
+<section id="videos" class="videos items">
 	<header><h1>Videos</h1></header>
 	{% for item in videos %}
 	{% set position = loop.index %}
@@ -34,13 +46,23 @@
 	{% endfor %}
 </section>
 
-</div>
-
-<section>
-{% for item in popular_content %}
-{% include "article.html" %}
+<section id="blogs" class="blogs">
+	<header><h1>Blogs</h1></header>
+{% for item in blogs %}
+{% set position = loop.index %}
+{% include "article.html"%}
 {% endfor %}
 </section>
+
+<section id="liveblogs" class="liveblogs items">
+	<header><h1>Liveblogs</h1></header>
+	{% for item in liveblogs %}
+	{% set position = loop.index %}
+	{% include "article.html" %}
+	{% endfor %}
+</section>
+</div>
+
 
 
 
