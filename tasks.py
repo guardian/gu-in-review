@@ -15,10 +15,15 @@ def ophan_api_key():
 	return '1aba9898-5635-43d3-b545-9a01fec1ebf6'
 
 def read_weeks_ophan_data():
+	cached_content = memcache.get("ophan_summary")
+
+	if cached_content:
+		return json.loads(cached_content)
+
 	base_url = "http://api.ophan.co.uk/api/mostread"
 
 	params = {
-		"api-key" : ophan_api_key,
+		"api-key" : ophan_api_key(),
 		"age" : 7 * 24 * 60 * 60,
 		"count" : 50,
 	}
@@ -29,6 +34,8 @@ def read_weeks_ophan_data():
 
 	if not result.status_code == 200: return None
 
+	memcache.add("ophan_summary", result.content)
+
 	return json.loads(result.content)
 
 def read_content(ophan_data):
@@ -36,7 +43,8 @@ def read_content(ophan_data):
 
 	params = {
 		"show-fields" : "standfirst,headline,thumbnail",
-		"show-tags" : all,
+		"show-tags" : "all",
+		"format" : "json",
 	}
 
 	parsed_url = urlparse(ophan_data["url"])
@@ -46,9 +54,11 @@ def read_content(ophan_data):
 	if cached_data:
 		return json.loads(cached_data)
 
-	logging.info(parsed_url.path)
+	logging.debug(parsed_url.path)
 
-	url = base_url + parsed_url.path
+	url = base_url + parsed_url.path + "?" + urlencode(params)
+
+	logging.info(url)
 
 	result = fetch(url, deadline = 6)
 
@@ -70,7 +80,11 @@ class ReadOphan(webapp2.RequestHandler):
 
 		headers.json(self.response)
 
-		data['popular_content'] = [read_content(result) for result in read_weeks_ophan_data()]
+		ophan_data = read_weeks_ophan_data()
+		popular_content = [read_content(result) for result in ophan_data]
+
+		data['popular_content'] = popular_content
+		memcache.add("popular_content", json.dumps(popular_content))
 
 		self.response.out.write(json.dumps(data))
 
