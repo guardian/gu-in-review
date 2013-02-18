@@ -7,18 +7,20 @@ from urllib import urlencode
 from urlparse import urlparse
 
 from google.appengine.api.urlfetch import fetch
+from google.appengine.api import memcache
 
 import logging
 
 def ophan_api_key():
-	return "6d6abdd9-6860-4261-85dc-496292192a14"
+	return '1aba9898-5635-43d3-b545-9a01fec1ebf6'
 
 def read_weeks_ophan_data():
 	base_url = "http://api.ophan.co.uk/api/mostread"
 
 	params = {
 		"api-key" : ophan_api_key,
-		"age" : 7 * 24 * 60 * 60
+		"age" : 7 * 24 * 60 * 60,
+		"count" : 50,
 	}
 
 	url = base_url + "?" + urlencode(params)
@@ -32,7 +34,17 @@ def read_weeks_ophan_data():
 def read_content(ophan_data):
 	base_url = "http://content.guardianapis.com"
 
+	params = {
+		"show-fields" : "standfirst,headline,thumbnail",
+		"show-tags" : all,
+	}
+
 	parsed_url = urlparse(ophan_data["url"])
+
+	cached_data = memcache.get(parsed_url.path)
+
+	if cached_data:
+		return json.loads(cached_data)
 
 	logging.info(parsed_url.path)
 
@@ -45,6 +57,8 @@ def read_content(ophan_data):
 	response = json.loads(result.content)
 
 	content = response.get("response", {}).get("content", {})
+
+	memcache.add(parsed_url.path, json.dumps(content), 3 * 60)
 
 	content['views'] = ophan_data['count']
 	return content
