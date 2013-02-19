@@ -14,7 +14,7 @@ from collections import namedtuple
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")))
 
-ContentSection = namedtuple("ContentSection", ["id", "title", "size"])
+ContentSection = namedtuple("ContentSection", ["id", "title", "size", "items"])
 
 def categorise_content(content):
 	if not content: return {}
@@ -38,7 +38,7 @@ class MainPage(webapp2.RequestHandler):
 		categorised_content = categorise_content(popular_content)
 		template_values.update(categorised_content)
 
-		template_values["content_sections"] = sorted([ContentSection(k, k.title(), len(v)) for k, v in categorised_content.items()], key = lambda x: x.size, reverse = True)
+		template_values["content_sections"] = sorted([ContentSection(k, k.title(), len(v), v) for k, v in categorised_content.items()], key = lambda x: x.size, reverse = True)
 
 		self.response.out.write(template.render(template_values))
 

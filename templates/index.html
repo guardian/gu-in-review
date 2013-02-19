@@ -20,66 +20,20 @@
 	{% endfor %}
 	</ul>
 
-<section id="news" class="news items">
-	<header><h1>News</h1></header>
-{% for item in news %}
-{% set position = loop.index %}
-{% include "article.html"%}
-{% endfor %}
-</section>
-
-<section id="features" class="features items">
-	<header><h1>Features</h1></header>
-{% for item in features %}
-{% set position = loop.index %}
-{% include "article.html"%}
-{% endfor %}
-</section>
-
-
-<section id="liveblogs" class="liveblogs items">
-	<header><h1>Liveblogs</h1></header>
-	{% for item in liveblogs %}
-	{% set position = loop.index %}
-	{% include "article.html" %}
+	{% for content in content_sections %}
+	<section id="{{content.id}}" class="{{content.id}} items">
+		<header><h1>{{content.title}}</h1></header>
+		{% if not content.items %}
+		<p>No content this week.</p>
+		{% endif %}
+		{% for item in content.items %}
+		{% set position = loop.index %}
+		{% include "article.html" %}
+		{% endfor %}
+	</section>
 	{% endfor %}
-</section>
-
-<section id="videos" class="videos items">
-	<header><h1>Videos</h1></header>
-	{% for item in videos %}
-	{% set position = loop.index %}
-	{% include "article.html" %}
-	{% endfor %}
-</section>
-
-<section id="sport" class="sport items">
-	<header><h1>Sport</h1></header>
-	{% for item in sport %}
-	{% set position = loop.index %}
-	{% include "article.html" %}
-	{% endfor %}
-</section>
-
-<section id="blogs" class="blogs">
-	<header><h1>Blogs</h1></header>
-{% for item in blogs %}
-{% set position = loop.index %}
-{% include "article.html"%}
-{% endfor %}
-</section>
 
 
-<section id="reviews" class="reviews items">
-	<header><h1>Reviews</h1></header>
-	{% if not reviews %}
-	<p>No content this week.</p>
-	{% endif %}
-	{% for item in reviews %}
-	{% set position = loop.index %}
-	{% include "article.html" %}
-	{% endfor %}
-</section>
 </div>
 
 
