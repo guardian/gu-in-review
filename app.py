@@ -9,8 +9,12 @@ from urllib import quote, urlencode
 from google.appengine.api import urlfetch
 from google.appengine.api import memcache
 
+from collections import namedtuple
+
 jinja_environment = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")))
+
+ContentSection = namedtuple("ContentSection", ["id", "title", "size"])
 
 def categorise_content(content):
 	if not content: return {}
@@ -31,7 +35,10 @@ class MainPage(webapp2.RequestHandler):
 
 		template_values = {'popular_content' : popular_content}
 
-		template_values.update(categorise_content(popular_content))
+		categorised_content = categorise_content(popular_content)
+		template_values.update(categorised_content)
+
+		template_values["content_sections"] = sorted([ContentSection(k, k.title(), len(v)) for k, v in categorised_content.items()], key = lambda x: x.size, reverse = True)
 
 		self.response.out.write(template.render(template_values))
 
