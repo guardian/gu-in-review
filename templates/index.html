@@ -7,7 +7,7 @@
 <header><h1 class="title"><span class="brand-name">The Guardian</span> week in review</h1></header>
 
 <blockquote class="app-quote">
-	<p>A review of what has been popular on the Guardian in the last week.</p>
+	<p>A review of the top 100 pieces of content on the Guardian in the last week.</p>
 	<p>Like Zeitgeist but worse...</p>
 	<p>All content is ordered according to how popular it was with the readers of the Guardian website.</p>
 </blockquote>
@@ -17,9 +17,11 @@
 <ul>
 	<li><a href="#news">News</a></li>
 	<li><a href="#features">Features</a></li>
-	<li><a href="#videos">Videos</a></li>
 	<li><a href="#liveblogs">Live blogs</a></li>
+	<li><a href="#videos">Videos</a></li>
+	<li><a href="#sport">Sport</a></li>
 	<li><a href="#blogs">Blogs</a></li>
+	<li><a href="#reviews">Reviews</a></li>
 </ul>
 
 <section id="news" class="news items">
@@ -38,9 +40,26 @@
 {% endfor %}
 </section>
 
+
+<section id="liveblogs" class="liveblogs items">
+	<header><h1>Liveblogs</h1></header>
+	{% for item in liveblogs %}
+	{% set position = loop.index %}
+	{% include "article.html" %}
+	{% endfor %}
+</section>
+
 <section id="videos" class="videos items">
 	<header><h1>Videos</h1></header>
 	{% for item in videos %}
+	{% set position = loop.index %}
+	{% include "article.html" %}
+	{% endfor %}
+</section>
+
+<section id="sport" class="sport items">
+	<header><h1>Sport</h1></header>
+	{% for item in sport %}
 	{% set position = loop.index %}
 	{% include "article.html" %}
 	{% endfor %}
@@ -54,9 +73,13 @@
 {% endfor %}
 </section>
 
-<section id="liveblogs" class="liveblogs items">
-	<header><h1>Liveblogs</h1></header>
-	{% for item in liveblogs %}
+
+<section id="reviews" class="reviews items">
+	<header><h1>Reviews</h1></header>
+	{% if not reviews %}
+	<p>No content this week.</p>
+	{% endif %}
+	{% for item in reviews %}
 	{% set position = loop.index %}
 	{% include "article.html" %}
 	{% endfor %}

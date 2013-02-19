@@ -19,7 +19,9 @@ def categorise_content(content):
 		"news" : [item for item in content if data_filters.news(item)],
 		"features" : [item for item in content if data_filters.features(item)],
 		"blogs" : [item for item in content if data_filters.blog(item)],		
-		"liveblogs" : [i for i in content if data_filters.live(i)],}
+		"liveblogs" : [i for i in content if data_filters.live(i)],
+		"reviews" : [i for i in content if data_filters.review(i)],
+		"sport" : [i for i in content if data_filters.sport(i)],}
 
 class MainPage(webapp2.RequestHandler):
 	def get(self):

@@ -25,7 +25,7 @@ def read_weeks_ophan_data():
 	params = {
 		"api-key" : ophan_api_key(),
 		"age" : 7 * 24 * 60 * 60,
-		"count" : 50,
+		"count" : 100,
 	}
 
 	url = base_url + "?" + urlencode(params)
