@@ -1,4 +1,5 @@
 import headers
+import configuration
 
 import webapp2
 import json
@@ -11,8 +12,7 @@ from google.appengine.api import memcache
 
 import logging
 
-def ophan_api_key():
-	return '1aba9898-5635-43d3-b545-9a01fec1ebf6'
+OPHAN_API_KEY = configuration.lookup("OPHAN_API_KEY")
 
 def read_weeks_ophan_data():
 	cached_content = memcache.get("ophan_summary")
@@ -23,7 +23,7 @@ def read_weeks_ophan_data():
 	base_url = "http://api.ophan.co.uk/api/mostread"
 
 	params = {
-		"api-key" : ophan_api_key(),
+		"api-key" : OPHAN_API_KEY,
 		"age" : 7 * 24 * 60 * 60,
 		"count" : 100,
 	}
@@ -80,11 +80,18 @@ class ReadOphan(webapp2.RequestHandler):
 
 		headers.json(self.response)
 
-		ophan_data = read_weeks_ophan_data()
-		popular_content = [read_content(result) for result in ophan_data]
+		cached_data = memcache.get("popular_content")
 
-		data['popular_content'] = popular_content
-		memcache.add("popular_content", json.dumps(popular_content))
+		if not cached_data:
+
+			ophan_data = read_weeks_ophan_data()
+			popular_content = [read_content(result) for result in ophan_data]
+
+			data['popular_content'] = popular_content
+			memcache.set("popular_content", json.dumps(popular_content))
+
+		if cached_data:
+			data['popular_content'] = json.loads(cached_data)
 
 		self.response.out.write(json.dumps(data))
 
