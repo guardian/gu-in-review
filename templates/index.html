@@ -12,6 +12,10 @@
 	<p>All content is ordered according to how popular it was with the readers of the Guardian website.</p>
 </blockquote>
 
+{% if not content_sections %}
+<p>No archive data available</p>
+{% endif %}
+
 <div id="tabs" class="tabs">
 
 	<ul>

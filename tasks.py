@@ -1,6 +1,8 @@
 import headers
 import configuration
 
+from models import OphanData
+
 import webapp2
 import json
 
@@ -86,6 +88,7 @@ class ReadOphan(webapp2.RequestHandler):
 
 			ophan_data = read_weeks_ophan_data()
 			popular_content = [read_content(result) for result in ophan_data]
+			popular_content = [item for item in popular_content if item]
 
 			data['popular_content'] = popular_content
 			memcache.set("popular_content", json.dumps(popular_content))
@@ -95,5 +98,21 @@ class ReadOphan(webapp2.RequestHandler):
 
 		self.response.out.write(json.dumps(data))
 
-app = webapp2.WSGIApplication([('/tasks/ophan', ReadOphan)],
-                              debug=True)
+class RecordOphan(webapp2.RequestHandler):
+	def get(self):
+		data = {"hello" : "world"}
+
+		headers.json(self.response)
+
+		ophan_data = read_weeks_ophan_data()
+
+		data['ophan_data'] = ophan_data
+
+		for content in ophan_data:
+			logging.info(content)
+			OphanData(url = content['url'], count = content['count']).put()
+
+		self.response.out.write(json.dumps(data))
+
+app = webapp2.WSGIApplication([('/tasks/ophan', ReadOphan),
+	('/tasks/ophan/record', RecordOphan),], debug=True)

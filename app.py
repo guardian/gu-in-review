@@ -30,15 +30,20 @@ def categorise_content(content):
 class MainPage(webapp2.RequestHandler):
 	def get(self):
 		template = jinja_environment.get_template('index.html')
+		template_values = {}
 		
-		popular_content = json.loads(memcache.get("popular_content"))
+		cached_content = memcache.get("popular_content")
 
-		template_values = {'popular_content' : popular_content}
+		if cached_content:
+			popular_content = json.loads(cached_content)
+			popular_content = [i for i in popular_content if i]
 
-		categorised_content = categorise_content(popular_content)
-		template_values.update(categorised_content)
+			template_values['popular_content'] = popular_content
 
-		template_values["content_sections"] = sorted([ContentSection(k, k.title(), len(v), v) for k, v in categorised_content.items()], key = lambda x: x.size, reverse = True)
+			categorised_content = categorise_content(popular_content)
+			template_values.update(categorised_content)
+
+			template_values["content_sections"] = sorted([ContentSection(k, k.title(), len(v), v) for k, v in categorised_content.items()], key = lambda x: x.size, reverse = True)
 
 		self.response.out.write(template.render(template_values))
 
